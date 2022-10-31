@@ -1,0 +1,53 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #e09f3e;
+  color: #fff3b0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  width: 100vw;
+
+  .icon-and-headerText {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10%;
+
+    .bi-list-check {
+      font-size: 2em;
+    }
+  }
+}
+
+.container {
+  background-color: #540b0e;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 5vw;
+  padding: 5vw;
+
+  .toDoCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 5%;
+    background-color: #9e2a2b;
+
+    .dateAndCheckbox {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+  }
+}
