@@ -136,24 +136,31 @@ function loadFinishedTasks() {
     let toDoCard = document.createElement("section");
     toDoCard.classList.add("to-do-card");
     finishedToDoCards.appendChild(toDoCard);
+
     let title = document.createElement("h1");
     title.innerText = finishedTasks[i].title;
+
     let description = document.createElement("p");
     description.innerText = finishedTasks[i].description;
+
     let dateAndCheckbox = document.createElement("div");
     dateAndCheckbox.classList.add("date-and-checkbox");
     toDoCard.appendChild(title);
     toDoCard.appendChild(description);
     toDoCard.appendChild(dateAndCheckbox);
+
     let dateCreated = document.createElement("p");
     dateCreated.innerText = "Skapad: " + finishedTasks[i].dateCreated;
+
     let dateCompleted = document.createElement("p");
     dateCompleted.innerText = "Slutförd: " + finishedTasks[i].dateCompleted;
-    checkbox = document.createElement("input");
+
+    let checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.checked = finishedTasks[i].completed;
     checkbox.classList.add("checkbox");
     checkbox.classList.add("checkbox--checked");
+
     dateAndCheckbox.appendChild(dateCreated);
     dateAndCheckbox.appendChild(dateCompleted);
     dateAndCheckbox.appendChild(checkbox);
