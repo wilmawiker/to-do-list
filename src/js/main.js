@@ -27,7 +27,6 @@ let tasks = [
     "Kompetensportfölj Inlämning",
     "LIA kartläggning, kompetensinventering, CV, personligt brev, LinkedIn",
     "10-10-2022",
-    "31-10-2022",
     false
   ),
 ];
@@ -40,7 +39,9 @@ for (let i = 0; i < tasks.length; i++) {
     unfinishedTasks.push(tasks[i]);
   }
 }
-let checkbox = false;
+
+let taskItemText = JSON.stringify(unfinishedTasks);
+localStorage.setItem("taskItem", taskItemText);
 
 function loadUnfinishedTasks() {
   unfinishedToDoCards.innerHTML = "";
@@ -48,41 +49,52 @@ function loadUnfinishedTasks() {
     let toDoCard = document.createElement("section");
     toDoCard.classList.add("to-do-card");
     unfinishedToDoCards.appendChild(toDoCard);
+
     let title = document.createElement("h1");
     title.innerText = unfinishedTasks[i].title;
+
     let description = document.createElement("p");
     description.innerText = unfinishedTasks[i].description;
+
     let dateAndCheckbox = document.createElement("div");
     dateAndCheckbox.classList.add("date-and-checkbox");
+
     toDoCard.appendChild(title);
     toDoCard.appendChild(description);
     toDoCard.appendChild(dateAndCheckbox);
+
     let dateCreated = document.createElement("p");
     dateCreated.innerText = "Skapad: " + unfinishedTasks[i].dateCreated;
-    checkbox = document.createElement("input");
+
+    let checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.checked = unfinishedTasks[i].completed;
     checkbox.classList.add("checkbox");
     checkbox.classList.add("checkbox--checked");
+
     dateAndCheckbox.appendChild(dateCreated);
     dateAndCheckbox.appendChild(checkbox);
 
-    checkbox.addEventListener("change", function () {
-      if (checkbox.checked) {
-        console.log("Checkbox is checked");
-        unfinishedTasks[i].completed = true;
-        finishedTasks.push(unfinishedTasks[i]);
-        unfinishedTasks.splice([i], 1);
-        console.log(unfinishedTasks);
-        console.log(finishedTasks);
-        loadUnfinishedTasks();
-        loadFinishedTasks();
-      }
+    checkbox.addEventListener("change", () => {
+      checkCheckbox(checkbox, unfinishedTasks[i]);
     });
   }
-}
 
-console.log(checkbox);
+  function checkCheckbox(checkbox, unfinishedTask) {
+    if (checkbox.checked) {
+      console.log("Checkbox is checked");
+      unfinishedTask.completed = true;
+      unfinishedTask.dateCompleted = Date();
+      finishedTasks.push(unfinishedTask);
+      let index = unfinishedTasks.indexOf(unfinishedTask);
+      unfinishedTasks.splice(index, 1);
+      console.log(unfinishedTasks);
+      console.log(finishedTasks);
+      loadUnfinishedTasks();
+      loadFinishedTasks();
+    }
+  }
+}
 
 let addNewTaskBtn = document.getElementById("new-task-btn");
 addNewTaskBtn.addEventListener("click", openFormForNewTask);
@@ -146,18 +158,24 @@ function loadFinishedTasks() {
     dateAndCheckbox.appendChild(dateCompleted);
     dateAndCheckbox.appendChild(checkbox);
 
-    checkbox.addEventListener("change", function () {
-      if (!checkbox.checked) {
-        console.log("Checkbox is unchecked");
-        finishedTasks[i].completed = false;
-        unfinishedTasks.push(finishedTasks[i]);
-        finishedTasks.splice([i], 1);
-        console.log(unfinishedTasks);
-        console.log(finishedTasks);
-        loadUnfinishedTasks();
-        loadFinishedTasks();
-      }
+    checkbox.addEventListener("change", () => {
+      checkCheckbox(checkbox, finishedTasks[i]);
     });
+  }
+
+  function checkCheckbox(checkbox, finishedTask) {
+    if (!checkbox.checked) {
+      console.log("Checkbox is unchecked");
+      finishedTask.completed = false;
+      finishedTask.dateCompleted = "";
+      unfinishedTasks.push(finishedTask);
+      let index = finishedTasks.indexOf(finishedTask);
+      finishedTasks.splice(index, 1);
+      console.log(unfinishedTasks);
+      console.log(finishedTasks);
+      loadUnfinishedTasks();
+      loadFinishedTasks();
+    }
   }
 }
 
@@ -182,4 +200,5 @@ function closeFormForNewTask() {
 //   console.log(newTask);
 //   unFinishedTasks.push(newTask);
 //   closeFormForNewTask();
+//  loadUnfinishedTasks();
 // }
