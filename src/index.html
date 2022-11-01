@@ -16,26 +16,32 @@
     <header class="header">
       <div class="icon-and-headerText">
         <i class="bi bi-list-check"></i>
-        <h1>Hej</h1>
+        <h1>Att göra</h1>
       </div>
-      <div>
-        <button type="button">Ny uppgift</button>
+      <div class="btn-container">
+        <button type="button" class="new-task-btn" id="new-task-btn">
+          Ny uppgift
+        </button>
       </div>
     </header>
-    <main class="container">
-      <section class="toDoCard">
-        <h1>JavaScript Inlämningsuppgift</h1>
-        <p>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nobis veniam
-          beatae exercitationem tenetur. Totam ipsam quaerat quia vero
-          asperiores eveniet aut obcaecati, ipsa similique eligendi sequi
-          excepturi accusantium itaque aliquid.
-        </p>
-        <div class="dateAndCheckbox">
-          <p>Inlagd: 31-10-2022</p>
-          <input type="checkbox" class="checkbox checkbox--checked" />
-        </div>
-      </section>
-    </main>
+    <form class="form-container--hidden" id="form-container">
+      <div class="form-container__fields">
+        <label for="title">Titel</label>
+        <input type="text" id="title" />
+        <label for="description">Beskrivning</label>
+        <textarea
+          name="description"
+          id="description"
+          cols="40"
+          rows="5"
+        ></textarea>
+      </div>
+      <div class="btn-container">
+        <button type="button" class="cancel-btn" id="cancel-btn">Avbryt</button>
+        <button type="button" class="submit-form-btn" id="submit-btn">
+          Lägg till
+        </button>
+      </div>
+    </form>
   </body>
 </html>

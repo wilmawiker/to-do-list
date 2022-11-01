@@ -1,3 +1,5 @@
+@use "mixins" as mix;
+
 body {
   margin: 0;
   padding: 0;
@@ -14,16 +16,80 @@ body {
   justify-content: space-around;
   align-items: center;
   width: 100vw;
+  margin-top: 5%;
+  max-width: 100%;
 
   .icon-and-headerText {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    gap: 10%;
+    gap: 5%;
+    width: 20vw;
+    color: #335c67;
 
     .bi-list-check {
       font-size: 2em;
+      color: #fff3b0;
     }
+  }
+
+  .btn-container {
+    .new-task-btn {
+      @include mix.primary-btn;
+    }
+  }
+}
+.form-container--hidden {
+  display: none;
+}
+
+.form-container--visible {
+  background-color: #540b0e;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-end;
+  margin: 5vw;
+  padding: 5vw;
+  padding-right: 10vw;
+  width: 50vw;
+
+  .form-container__fields {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: baseline;
+
+    input {
+      width: 40vw;
+      padding: 12px 20px;
+      margin: 8px 0;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      resize: none;
+      width: 40vw;
+      padding: 12px 20px;
+      margin: 8px 0;
+      box-sizing: border-box;
+    }
+  }
+
+  .cancel-btn {
+    background-color: #fff3b0;
+    color: #335c67;
+    padding: 1em;
+    border: none;
+    text-decoration: none;
+    border-radius: 5px;
+
+    &:hover {
+      background-color: #e4d99c;
+    }
+  }
+
+  .submit-form-btn {
+    @include mix.primary-btn;
   }
 }
 
@@ -35,19 +101,41 @@ body {
   align-items: center;
   margin: 5vw;
   padding: 5vw;
+  width: 80vw;
 
-  .toDoCard {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 5%;
-    background-color: #9e2a2b;
+  .unfinished-to-do-cards {
+    @include mix.to-do-card-collection-styling;
+    .to-do-card {
+      @include mix.to-do-card-styling;
 
-    .dateAndCheckbox {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: baseline;
+      .date-and-checkbox {
+        @include mix.date-and-checkbox-styling;
+
+        .checkbox {
+          @include mix.checkbox-styling;
+        }
+      }
+    }
+  }
+
+  .to-do-cards-divider {
+    width: 95%;
+    .solid {
+      border-top: 0.5em solid #fff3b0;
+    }
+  }
+  .finished-to-do-cards {
+    @include mix.to-do-card-collection-styling;
+    .to-do-card {
+      @include mix.to-do-card-styling;
+
+      .date-and-checkbox {
+        @include mix.date-and-checkbox-styling;
+
+        .checkbox {
+          @include mix.checkbox-styling;
+        }
+      }
     }
   }
 }

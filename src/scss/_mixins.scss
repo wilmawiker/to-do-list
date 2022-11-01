@@ -1,0 +1,37 @@
+@mixin primary-btn {
+  background-color: #335c67;
+  color: #fff3b0;
+  padding: 1em;
+  border: none;
+  text-decoration: none;
+  border-radius: 5px;
+
+  &:hover {
+    background-color: #2b4e57;
+  }
+}
+
+@mixin to-do-card-collection-styling {
+  width: 95%;
+}
+
+@mixin to-do-card-styling {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5%;
+  margin-bottom: 5%;
+  background-color: #9e2a2b;
+}
+
+@mixin date-and-checkbox-styling {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+@mixin checkbox-styling {
+  width: 2em;
+  height: 2em;
+}
