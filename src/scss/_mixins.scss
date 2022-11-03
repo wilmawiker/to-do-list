@@ -1,6 +1,8 @@
+@use "variables" as v;
+
 @mixin primary-btn {
   background-color: #335c67;
-  color: #fff3b0;
+  color: v.$primary-color;
   padding: 1em;
   border: none;
   text-decoration: none;
