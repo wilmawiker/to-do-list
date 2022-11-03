@@ -33,10 +33,12 @@ function addNewTask() {
   loadUnfinishedTasks();
 }
 
+//Om talet vi hämtar endast innehåller en siffra så lägger den på en 0
 function formatToTwoDigits(number) {
   return number.toString().padStart(2, "0");
 }
 
+//Funktion som ändrar datumet till dd-mm-yyyy
 function formatDate(date) {
   return [
     formatToTwoDigits(date.getDate()),
@@ -106,7 +108,7 @@ function createCard(listItemAndIndex, parentContainer) {
     if (checkbox.checked) {
       console.log("Checkbox is checked");
       task.completed = true;
-      task.dateCompleted = Date();
+      task.dateCompleted = formatDate(new Date());
 
       finishedTasks.push(task);
 
@@ -171,12 +173,13 @@ function createCard(listItemAndIndex, parentContainer) {
   }
 }
 
+//Funktion som sorterar oklara objekt på datum de är skapade
 function sortUnfinishedTasks() {
   unfinishedTasks.reverse();
   loadUnfinishedTasks();
 }
 
-//Hårdkodade uppgifter om jag behöver cleara loccalStorage och bygga om pga jag förstörde nåt :)
+//Hårdkodade uppgifter som presenteras om inget redan ligger i localStorage
 if (localStorage.getItem("unfinishedTaskItem") === null) {
   let startTasks = [
     new Task(
@@ -205,6 +208,7 @@ if (localStorage.getItem("unfinishedTaskItem") === null) {
   localStorage.setItem("unfinishedTaskItem", taskItemText);
 }
 
+//Hämtar listorna från localStorage, kollar om listan med klara uppgifter är tom, annars lägger den ihop dem till en lista för att senare kunna dela upp dem i separat listor.
 let unfinishedTask = localStorage.getItem("unfinishedTaskItem");
 let finishedTask = localStorage.getItem("finishedTaskItem");
 unfinishedTask = JSON.parse(unfinishedTask);
@@ -233,71 +237,12 @@ for (let i = 0; i < tasks.length; i++) {
   }
 }
 
-//Function för att göra kort som visas på sidan, för varje listobjekt.
+//Funktioner för att göra kort som visas på sidan, för varje listobjekt.
 function loadUnfinishedTasks() {
   unfinishedToDoCards.innerHTML = "";
   for (let i = 0; i < unfinishedTasks.length; i++) {
     createCard(unfinishedTasks[i], unfinishedToDoCards);
-    /* let toDoCard = document.createElement("section");
-    toDoCard.classList.add("to-do-card");
-    unfinishedToDoCards.appendChild(toDoCard);
-
-    let title = document.createElement("h1");
-    title.innerText = unfinishedTasks[i].title;
-
-    let description = document.createElement("p");
-    description.innerText = unfinishedTasks[i].description;
-
-    let dateAndCheckbox = document.createElement("div");
-    dateAndCheckbox.classList.add("date-and-checkbox");
-
-    toDoCard.appendChild(title);
-    toDoCard.appendChild(description);
-    toDoCard.appendChild(dateAndCheckbox);
-
-    let dateCreated = document.createElement("p");
-    dateCreated.innerText = "Skapad: " + unfinishedTasks[i].dateCreated;
-
-    let checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.checked = unfinishedTasks[i].completed;
-    checkbox.classList.add("checkbox");
-    checkbox.classList.add("checkbox--checked");
-
-    dateAndCheckbox.appendChild(dateCreated);
-    dateAndCheckbox.appendChild(checkbox);
-
-    checkbox.addEventListener("change", () => {
-      checkCheckbox(checkbox, unfinishedTasks[i]);
-    }); */
   }
-
-  //Function som kollar om checkboxen är ikryssad(true), om ja så flyttas objektet/den klara uppgiften till listan för avklarade uppgifter
-  /* function checkCheckbox(checkbox, unfinishedTask) {
-    if (checkbox.checked) {
-      console.log("Checkbox is checked");
-      unfinishedTask.completed = true;
-      unfinishedTask.dateCompleted = Date();
-
-      finishedTasks.push(unfinishedTask);
-
-      let index = unfinishedTasks.indexOf(unfinishedTask);
-      unfinishedTasks.splice(index, 1);
-
-      let taskItemText = JSON.stringify(finishedTasks);
-      localStorage.setItem("finishedTaskItem", taskItemText);
-
-      taskItemText = JSON.stringify(unfinishedTasks);
-      localStorage.setItem("unfinishedTaskItem", taskItemText);
-
-      console.log(unfinishedTasks);
-      console.log(finishedTasks);
-
-      //Hämtar korten igen så sidan "uppdateras" utan att laddas om
-      loadUnfinishedTasks();
-      loadFinishedTasks();
-    }
-  } */
 }
 
 function loadFinishedTasks() {
@@ -305,51 +250,31 @@ function loadFinishedTasks() {
   for (let i = 0; i < finishedTasks.length; i++) {
     createCard(finishedTasks[i], finishedToDoCards);
   }
-
-  // function checkCheckbox(checkbox, finishedTask) {
-  //   if (!checkbox.checked) {
-  //     console.log("Checkbox is unchecked");
-  //     finishedTask.completed = false;
-  //     finishedTask.dateCompleted = "";
-
-  //     unfinishedTasks.push(finishedTask);
-
-  //     let index = finishedTasks.indexOf(finishedTask);
-  //     finishedTasks.splice(index, 1);
-
-  //     let taskItemText = JSON.stringify(unfinishedTasks);
-  //     localStorage.setItem("unfinishedTaskItem", taskItemText);
-
-  //     taskItemText = JSON.stringify(finishedTasks);
-  //     localStorage.setItem("finishedTaskItem", taskItemText);
-
-  //     console.log(unfinishedTasks);
-  //     console.log(finishedTasks);
-  //     loadUnfinishedTasks();
-  //     loadFinishedTasks();
-  //   }
-  // }
 }
 
 //Skapar lyssnare på knappen som öppnar forumläret för att skapa en ny uppgift
 let addNewTaskBtn = document.getElementById("new-task-btn");
 addNewTaskBtn.addEventListener("click", openFormForNewTask);
 
+//Skapar lyssnare på knappen som stänger forumläret för att skapa en ny uppgift
 let cancelBtn = document.getElementById("cancel-btn");
 cancelBtn.addEventListener("click", closeFormForNewTask);
 
+//Skapar lyssnare på knappen som sparar forumläret för att skapa en ny uppgift
 let submitBtn = document.getElementById("submit-btn");
 submitBtn.addEventListener("click", addNewTask);
 
+//Skapar upp sidan med HTML-element
 let container = document.createElement("main");
 container.classList.add("container");
 document.body.appendChild(container);
 
 let sortList = document.createElement("button");
 sortList.classList.add("sort-btn");
-sortList.innerText = "Sortera uppgifter A-Z/Z-A";
+sortList.innerText = "Sortera uppgifter på datum";
 container.appendChild(sortList);
 
+//Lyssnare för att sortera
 sortList.addEventListener("click", sortUnfinishedTasks);
 
 let unfinishedToDoCards = document.createElement("div");
