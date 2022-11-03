@@ -207,7 +207,6 @@ finishedTask = JSON.parse(finishedTask);
 let tasks = [];
 if (finishedTask !== null) {
   tasks = unfinishedTask.concat(finishedTask);
-  console.log(tasks);
   if (finishedTask !== []) {
     tasks = unfinishedTask.concat(finishedTask);
   }
