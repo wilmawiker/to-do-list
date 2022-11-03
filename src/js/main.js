@@ -1,12 +1,4 @@
-class Task {
-  constructor(title, description, dateCreated, dateCompleted, completed) {
-    this.title = title;
-    this.description = description;
-    this.dateCreated = dateCreated;
-    this.dateCompleted = dateCompleted;
-    this.completed = completed;
-  }
-}
+import { Task } from "./models/task";
 
 //Skapar upp två tomma listor
 let unfinishedTasks = [];
@@ -41,8 +33,99 @@ function addNewTask() {
   loadUnfinishedTasks();
 }
 
-//Hårdkodade uppgifter
-/* let tasks = [
+function createCard(listItemAndIndex, parentContainer) {
+  let toDoCard = document.createElement("section");
+  toDoCard.classList.add("to-do-card");
+  parentContainer.appendChild(toDoCard);
+
+  let title = document.createElement("h1");
+  title.innerText = listItemAndIndex.title;
+
+  let description = document.createElement("p");
+  description.innerText = listItemAndIndex.description;
+
+  let dateAndCheckbox = document.createElement("div");
+  dateAndCheckbox.classList.add("date-and-checkbox");
+
+  toDoCard.appendChild(title);
+  toDoCard.appendChild(description);
+  toDoCard.appendChild(dateAndCheckbox);
+
+  let dateCreated = document.createElement("p");
+  dateCreated.innerText = "Skapad: " + listItemAndIndex.dateCreated;
+
+  let dateCompleted = document.createElement("p");
+  if (listItemAndIndex.dateCompleted !== null) {
+    dateCompleted.innerText = "Slutförd: " + listItemAndIndex.dateCompleted;
+  } else {
+    dateCompleted.innerText = "";
+  }
+
+  let checkbox = document.createElement("input");
+  checkbox.type = "checkbox";
+  checkbox.checked = listItemAndIndex.completed;
+  checkbox.classList.add("checkbox");
+  checkbox.classList.add("checkbox--checked");
+
+  dateAndCheckbox.appendChild(dateCreated);
+  dateAndCheckbox.appendChild(dateCompleted);
+  dateAndCheckbox.appendChild(checkbox);
+
+  checkbox.addEventListener("change", () => {
+    checkCheckbox(checkbox, listItemAndIndex);
+  });
+
+  function checkCheckbox(checkbox, task) {
+    if (checkbox.checked) {
+      console.log("Checkbox is checked");
+      task.completed = true;
+      task.dateCompleted = Date();
+
+      finishedTasks.push(task);
+
+      let index = unfinishedTasks.indexOf(task);
+      unfinishedTasks.splice(index, 1);
+
+      let taskItemText = JSON.stringify(finishedTasks);
+      localStorage.setItem("finishedTaskItem", taskItemText);
+
+      taskItemText = JSON.stringify(unfinishedTasks);
+      localStorage.setItem("unfinishedTaskItem", taskItemText);
+
+      console.log(unfinishedTasks);
+      console.log(finishedTasks);
+
+      //Hämtar korten igen så sidan "uppdateras" utan att laddas om
+      loadUnfinishedTasks();
+      loadFinishedTasks();
+    } else {
+      console.log("Checkbox is unchecked");
+      task.completed = false;
+      task.dateCompleted = "";
+
+      unfinishedTasks.push(task);
+
+      let index = finishedTasks.indexOf(task);
+      finishedTasks.splice(index, 1);
+
+      let taskItemText = JSON.stringify(unfinishedTasks);
+      localStorage.setItem("unfinishedTaskItem", taskItemText);
+
+      taskItemText = JSON.stringify(finishedTasks);
+      localStorage.setItem("finishedTaskItem", taskItemText);
+
+      console.log(unfinishedTasks);
+      console.log(finishedTasks);
+      loadUnfinishedTasks();
+      loadFinishedTasks();
+    }
+  }
+}
+
+//Hårdkodade uppgifter om jag behöver cleara loccalStorage och bygga om pga jag förstörde nåt :)
+/* 
+localStorage.clear();
+let tasks = [
   new Task(
     "JavaScript Inlämning",
     "Skapa en to do lista i JavaScript",
@@ -100,7 +183,8 @@ for (let i = 0; i < tasks.length; i++) {
 function loadUnfinishedTasks() {
   unfinishedToDoCards.innerHTML = "";
   for (let i = 0; i < unfinishedTasks.length; i++) {
-    let toDoCard = document.createElement("section");
+    createCard(unfinishedTasks[i], unfinishedToDoCards);
+    /* let toDoCard = document.createElement("section");
     toDoCard.classList.add("to-do-card");
     unfinishedToDoCards.appendChild(toDoCard);
 
@@ -131,11 +215,11 @@ function loadUnfinishedTasks() {
 
     checkbox.addEventListener("change", () => {
       checkCheckbox(checkbox, unfinishedTasks[i]);
-    });
+    }); */
   }
 
   //Function som kollar om checkboxen är ikryssad(true), om ja så flyttas objektet/den klara uppgiften till listan för avklarade uppgifter
-  function checkCheckbox(checkbox, unfinishedTask) {
+  /* function checkCheckbox(checkbox, unfinishedTask) {
     if (checkbox.checked) {
       console.log("Checkbox is checked");
       unfinishedTask.completed = true;
@@ -159,7 +243,38 @@ function loadUnfinishedTasks() {
       loadUnfinishedTasks();
       loadFinishedTasks();
     }
+  } */
+}
+
+function loadFinishedTasks() {
+  finishedToDoCards.innerHTML = "";
+  for (let i = 0; i < finishedTasks.length; i++) {
+    createCard(finishedTasks[i], finishedToDoCards);
   }
+
+  // function checkCheckbox(checkbox, finishedTask) {
+  //   if (!checkbox.checked) {
+  //     console.log("Checkbox is unchecked");
+  //     finishedTask.completed = false;
+  //     finishedTask.dateCompleted = "";
+
+  //     unfinishedTasks.push(finishedTask);
+
+  //     let index = finishedTasks.indexOf(finishedTask);
+  //     finishedTasks.splice(index, 1);
+
+  //     let taskItemText = JSON.stringify(unfinishedTasks);
+  //     localStorage.setItem("unfinishedTaskItem", taskItemText);
+
+  //     taskItemText = JSON.stringify(finishedTasks);
+  //     localStorage.setItem("finishedTaskItem", taskItemText);
+
+  //     console.log(unfinishedTasks);
+  //     console.log(finishedTasks);
+  //     loadUnfinishedTasks();
+  //     loadFinishedTasks();
+  //   }
+  // }
 }
 
 //Skapar lyssnare på knappen som öppnar forumläret för att skapa en ny uppgift
@@ -196,71 +311,6 @@ toDoCardsDivider.appendChild(finishedTasksText);
 let finishedToDoCards = document.createElement("div");
 finishedToDoCards.classList.add("finished-to-do-cards");
 container.appendChild(finishedToDoCards);
-
-function loadFinishedTasks() {
-  finishedToDoCards.innerHTML = "";
-  for (let i = 0; i < finishedTasks.length; i++) {
-    let toDoCard = document.createElement("section");
-    toDoCard.classList.add("to-do-card");
-    finishedToDoCards.appendChild(toDoCard);
-
-    let title = document.createElement("h1");
-    title.innerText = finishedTasks[i].title;
-
-    let description = document.createElement("p");
-    description.innerText = finishedTasks[i].description;
-
-    let dateAndCheckbox = document.createElement("div");
-    dateAndCheckbox.classList.add("date-and-checkbox");
-    toDoCard.appendChild(title);
-    toDoCard.appendChild(description);
-    toDoCard.appendChild(dateAndCheckbox);
-
-    let dateCreated = document.createElement("p");
-    dateCreated.innerText = "Skapad: " + finishedTasks[i].dateCreated;
-
-    let dateCompleted = document.createElement("p");
-    dateCompleted.innerText = "Slutförd: " + finishedTasks[i].dateCompleted; //enda skillnaden mellan skapande av korten
-
-    let checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.checked = finishedTasks[i].completed;
-    checkbox.classList.add("checkbox");
-    checkbox.classList.add("checkbox--checked");
-
-    dateAndCheckbox.appendChild(dateCreated);
-    dateAndCheckbox.appendChild(dateCompleted); //
-    dateAndCheckbox.appendChild(checkbox);
-
-    checkbox.addEventListener("change", () => {
-      checkCheckbox(checkbox, finishedTasks[i]);
-    });
-  }
-
-  function checkCheckbox(checkbox, finishedTask) {
-    if (!checkbox.checked) {
-      console.log("Checkbox is unchecked");
-      finishedTask.completed = false;
-      finishedTask.dateCompleted = "";
-
-      unfinishedTasks.push(finishedTask);
-
-      let index = finishedTasks.indexOf(finishedTask);
-      finishedTasks.splice(index, 1);
-
-      let taskItemText = JSON.stringify(unfinishedTasks);
-      localStorage.setItem("unfinishedTaskItem", taskItemText);
-
-      taskItemText = JSON.stringify(finishedTasks);
-      localStorage.setItem("finishedTaskItem", taskItemText);
-
-      console.log(unfinishedTasks);
-      console.log(finishedTasks);
-      loadUnfinishedTasks();
-      loadFinishedTasks();
-    }
-  }
-}
 
 loadUnfinishedTasks();
 loadFinishedTasks();
