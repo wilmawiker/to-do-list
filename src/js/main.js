@@ -68,9 +68,20 @@ function addNewTask() {
 let taskItemText = JSON.stringify(tasks);
 localStorage.setItem("unfinishedTaskItem", taskItemText); */
 
-let task = localStorage.getItem("unfinishedTaskItem");
-let tasks = JSON.parse(task);
-console.log(tasks);
+let unfinishedTask = localStorage.getItem("unfinishedTaskItem");
+let finishedTask = localStorage.getItem("finishedTaskItem");
+unfinishedTask = JSON.parse(unfinishedTask);
+finishedTask = JSON.parse(finishedTask);
+let tasks = [];
+if (finishedTask !== null) {
+  tasks = unfinishedTask.concat(finishedTask);
+  console.log(tasks);
+  if (finishedTask !== []) {
+    tasks = unfinishedTask.concat(finishedTask);
+  }
+} else {
+  tasks = unfinishedTask;
+}
 
 //Delar in uppgifterna i rätt lista beroende på om completed är true eller false
 for (let i = 0; i < tasks.length; i++) {
@@ -135,8 +146,11 @@ function loadUnfinishedTasks() {
       let index = unfinishedTasks.indexOf(unfinishedTask);
       unfinishedTasks.splice(index, 1);
 
-      let taskItemText = JSON.stringify(unfinishedTask);
+      let taskItemText = JSON.stringify(finishedTasks);
       localStorage.setItem("finishedTaskItem", taskItemText);
+
+      taskItemText = JSON.stringify(unfinishedTasks);
+      localStorage.setItem("unfinishedTaskItem", taskItemText);
 
       console.log(unfinishedTasks);
       console.log(finishedTasks);
@@ -234,8 +248,11 @@ function loadFinishedTasks() {
       let index = finishedTasks.indexOf(finishedTask);
       finishedTasks.splice(index, 1);
 
-      let taskItemText = JSON.stringify(finishedTasks);
+      let taskItemText = JSON.stringify(unfinishedTasks);
       localStorage.setItem("unfinishedTaskItem", taskItemText);
+
+      taskItemText = JSON.stringify(finishedTasks);
+      localStorage.setItem("finishedTaskItem", taskItemText);
 
       console.log(unfinishedTasks);
       console.log(finishedTasks);
