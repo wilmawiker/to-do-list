@@ -24,7 +24,7 @@ function addNewTask() {
   let title = document.getElementById("title").value;
   let description = document.getElementById("description").value;
 
-  let newTask = new Task(title, description, Date(), "", false);
+  let newTask = new Task(title, description, formatDate(new Date()), "", false);
   console.log(newTask);
   unfinishedTasks.push(newTask);
   let taskItemText = JSON.stringify(unfinishedTasks);
@@ -33,21 +33,43 @@ function addNewTask() {
   loadUnfinishedTasks();
 }
 
+function formatToTwoDigits(number) {
+  return number.toString().padStart(2, "0");
+}
+
+function formatDate(date) {
+  return [
+    formatToTwoDigits(date.getDate()),
+    formatToTwoDigits(date.getMonth() + 1),
+    date.getFullYear(),
+  ].join("-");
+}
+
+//Skapar kort
 function createCard(listItemAndIndex, parentContainer) {
   let toDoCard = document.createElement("section");
   toDoCard.classList.add("to-do-card");
   parentContainer.appendChild(toDoCard);
 
+  let titleAndRemovBtn = document.createElement("div");
+  titleAndRemovBtn.classList.add("date-checkbox-title-and-remove-btn");
+
   let title = document.createElement("h1");
   title.innerText = listItemAndIndex.title;
+
+  let removeBtn = document.createElement("i");
+  removeBtn.classList.add("bi");
+  removeBtn.classList.add("bi-x-lg");
 
   let description = document.createElement("p");
   description.innerText = listItemAndIndex.description;
 
   let dateAndCheckbox = document.createElement("div");
-  dateAndCheckbox.classList.add("date-and-checkbox");
+  dateAndCheckbox.classList.add("date-checkbox-title-and-remove-btn");
 
-  toDoCard.appendChild(title);
+  toDoCard.appendChild(titleAndRemovBtn);
+  titleAndRemovBtn.appendChild(title);
+  titleAndRemovBtn.appendChild(removeBtn);
   toDoCard.appendChild(description);
   toDoCard.appendChild(dateAndCheckbox);
 
@@ -75,6 +97,11 @@ function createCard(listItemAndIndex, parentContainer) {
     checkCheckbox(checkbox, listItemAndIndex);
   });
 
+  removeBtn.addEventListener("click", () => {
+    deleteTask(removeBtn, listItemAndIndex);
+  });
+
+  //Funktion som flyttar uppgifter mellan listor när checkboxen för objektet ändras.
   function checkCheckbox(checkbox, task) {
     if (checkbox.checked) {
       console.log("Checkbox is checked");
@@ -98,7 +125,9 @@ function createCard(listItemAndIndex, parentContainer) {
       //Hämtar korten igen så sidan "uppdateras" utan att laddas om
       loadUnfinishedTasks();
       loadFinishedTasks();
-    } else {
+    }
+    //Gör tvärtom om checkboxen ändras.
+    else {
       console.log("Checkbox is unchecked");
       task.completed = false;
       task.dateCompleted = "";
@@ -120,36 +149,61 @@ function createCard(listItemAndIndex, parentContainer) {
       loadFinishedTasks();
     }
   }
+
+  //Funktion som tar bort uppgiften
+  function deleteTask(button, task) {
+    console.log(task);
+    if (task.completed === false) {
+      let index = unfinishedTasks.indexOf(task);
+      unfinishedTasks.splice(index, 1);
+
+      let taskItemText = JSON.stringify(unfinishedTasks);
+      localStorage.setItem("unfinishedTaskItem", taskItemText);
+    } else {
+      let index = finishedTasks.indexOf(task);
+      finishedTasks.splice(index, 1);
+
+      let taskItemText = JSON.stringify(finishedTasks);
+      localStorage.setItem("finishedTaskItem", taskItemText);
+    }
+    loadUnfinishedTasks();
+    loadFinishedTasks();
+  }
+}
+
+function sortUnfinishedTasks() {
+  unfinishedTasks.reverse();
+  loadUnfinishedTasks();
 }
 
 //Hårdkodade uppgifter om jag behöver cleara loccalStorage och bygga om pga jag förstörde nåt :)
-/* 
-localStorage.clear();
-let tasks = [
-  new Task(
-    "JavaScript Inlämning",
-    "Skapa en to do lista i JavaScript",
-    "31-10-2022",
-    "",
-    false
-  ),
-  new Task(
-    "Gym",
-    "Knäböj 1x3 95kg, Hip Thrusts 3x5 140kg",
-    "31-10-2022",
-    "",
-    false
-  ),
-  new Task(
-    "Kompetensportfölj Inlämning",
-    "LIA kartläggning, kompetensinventering, CV, personligt brev, LinkedIn",
-    "10-10-2022",
-    false
-  ),
-]; 
+if (localStorage.getItem("unfinishedTaskItem") === null) {
+  let startTasks = [
+    new Task(
+      "JavaScript Inlämning",
+      "Skapa en to do lista i JavaScript",
+      "31-10-2022",
+      "",
+      false
+    ),
+    new Task(
+      "Gym",
+      "Knäböj 1x3 95kg, Hip Thrusts 3x5 140kg",
+      "31-10-2022",
+      "",
+      false
+    ),
+    new Task(
+      "Kompetensportfölj Inlämning",
+      "LIA kartläggning, kompetensinventering, CV, personligt brev, LinkedIn",
+      "10-10-2022",
+      false
+    ),
+  ];
 
-let taskItemText = JSON.stringify(tasks);
-localStorage.setItem("unfinishedTaskItem", taskItemText); */
+  let taskItemText = JSON.stringify(startTasks);
+  localStorage.setItem("unfinishedTaskItem", taskItemText);
+}
 
 let unfinishedTask = localStorage.getItem("unfinishedTaskItem");
 let finishedTask = localStorage.getItem("finishedTaskItem");
@@ -290,6 +344,13 @@ submitBtn.addEventListener("click", addNewTask);
 let container = document.createElement("main");
 container.classList.add("container");
 document.body.appendChild(container);
+
+let sortList = document.createElement("button");
+sortList.classList.add("sort-btn");
+sortList.innerText = "Sortera uppgifter A-Z/Z-A";
+container.appendChild(sortList);
+
+sortList.addEventListener("click", sortUnfinishedTasks);
 
 let unfinishedToDoCards = document.createElement("div");
 unfinishedToDoCards.classList.add("unfinished-to-do-cards");

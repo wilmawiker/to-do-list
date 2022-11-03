@@ -103,13 +103,18 @@ body {
   padding: 5vw;
   width: 80vw;
 
+  .sort-btn {
+    @include mix.primary-btn;
+    margin-bottom: 10px;
+  }
+
   .unfinished-to-do-cards {
     @include mix.to-do-card-collection-styling;
     .to-do-card {
       @include mix.to-do-card-styling;
 
-      .date-and-checkbox {
-        @include mix.date-and-checkbox-styling;
+      .date-checkbox-title-and-remove-btn {
+        @include mix.date-checkbox-title-and-remove-btn-styling;
 
         .checkbox {
           @include mix.checkbox-styling;
@@ -129,8 +134,8 @@ body {
     .to-do-card {
       @include mix.to-do-card-styling;
 
-      .date-and-checkbox {
-        @include mix.date-and-checkbox-styling;
+      .date-checkbox-title-and-remove-btn {
+        @include mix.date-checkbox-title-and-remove-btn-styling;
 
         .checkbox {
           @include mix.checkbox-styling;
