@@ -25,7 +25,6 @@ function addNewTask() {
   let description = document.getElementById("description").value;
 
   let newTask = new Task(title, description, formatDate(new Date()), "", false);
-  console.log(newTask);
   unfinishedTasks.push(newTask);
   let taskItemText = JSON.stringify(unfinishedTasks);
   localStorage.setItem("unfinishedTaskItem", taskItemText);
@@ -106,7 +105,6 @@ function createCard(listItemAndIndex, parentContainer) {
   //Funktion som flyttar uppgifter mellan listor när checkboxen för objektet ändras.
   function checkCheckbox(checkbox, task) {
     if (checkbox.checked) {
-      console.log("Checkbox is checked");
       task.completed = true;
       task.dateCompleted = formatDate(new Date());
 
@@ -121,16 +119,12 @@ function createCard(listItemAndIndex, parentContainer) {
       taskItemText = JSON.stringify(unfinishedTasks);
       localStorage.setItem("unfinishedTaskItem", taskItemText);
 
-      console.log(unfinishedTasks);
-      console.log(finishedTasks);
-
       //Hämtar korten igen så sidan "uppdateras" utan att laddas om
       loadUnfinishedTasks();
       loadFinishedTasks();
     }
     //Gör tvärtom om checkboxen ändras.
     else {
-      console.log("Checkbox is unchecked");
       task.completed = false;
       task.dateCompleted = "";
 
@@ -145,8 +139,6 @@ function createCard(listItemAndIndex, parentContainer) {
       taskItemText = JSON.stringify(finishedTasks);
       localStorage.setItem("finishedTaskItem", taskItemText);
 
-      console.log(unfinishedTasks);
-      console.log(finishedTasks);
       loadUnfinishedTasks();
       loadFinishedTasks();
     }
@@ -154,7 +146,6 @@ function createCard(listItemAndIndex, parentContainer) {
 
   //Funktion som tar bort uppgiften
   function deleteTask(button, task) {
-    console.log(task);
     if (task.completed === false) {
       let index = unfinishedTasks.indexOf(task);
       unfinishedTasks.splice(index, 1);
